@@ -85,7 +85,7 @@ var _ = {};
   _.filter = function(collection, test) {
     var arr = [];
     for(var i = 0; i < collection.length; i++)
-     if (test(collection[i])) { arr.push(collection[i]); }
+     if (test(collection[i], i, collection)) { arr.push(collection[i]); }
     
     return arr;
   };
@@ -96,7 +96,7 @@ var _ = {};
     // copying code in and modifying it
     var arr = [];
     arr = _.filter(collection, function() {
-      return !test.apply(this, arguments);
+      return !test.apply(self, arguments);
     });
     return arr;
   };
@@ -105,8 +105,14 @@ var _ = {};
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-
+    return _.filter(array, function(val, index, self){
+      // make sure there is only one index, duplicates will have
+      // multiple indexes, we won't return those.
+      return self.indexOf(val) === index; 
+    }).sort(function(x,y){ return x - y; }); //sort the duplicate free array
   };
+
+  console.log(_.uniq([1,23,23,4,4,5,42,3,2,4,66,66,0,7,66,77,7,10,9,5,2,1]));
 
 
   // Return the results of applying an iterator to each element.
@@ -114,7 +120,22 @@ var _ = {};
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var arr = [];
+    if(Array.isArray(collection)){
+      for(var i = 0; i < collection.length; i++)
+        arr.push(iterator(collection[i], i, collection));
+    } else {
+      for (var key in collection)
+        arr.push(iterator(collection[key], key, collection));
+    }
+    return arr;
   };
+
+   var doubled = _.map([1, 2, 3], function(num) {
+      return num * 2;
+    });
+
+   console.log(doubled);
 
   /*
    * TIP: map is really handy when you want to transform an array of
