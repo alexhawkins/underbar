@@ -153,7 +153,7 @@ var _ = {};
         //check to see if function or method name provided
         var isFunc = typeof functionOrKey === 'function' ? true : false;
         for(var i = 0; i < collection.length; i++){
-          arr.push((isFunc ? functionOrKey : collection[i][functionOrKey]).apply(collection[i], args))
+          arr.push((isFunc ? functionOrKey : collection[i][functionOrKey]).apply(collection[i], args));
       }
       return arr;
   };
@@ -181,6 +181,11 @@ var _ = {};
   //     return total +// should be 6 number;
   //   }, 0); 
   _.reduce = function(collection, iterator, accumulator) {
+      accumulator = accumulator === undefined ? collection[0] : accumulator;
+      _.each(collection, function(item){
+         accumulator = iterator(item, accumulator) || item;
+      });
+      return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
