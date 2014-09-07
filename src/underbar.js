@@ -95,13 +95,13 @@ var _ = {};
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
     var arr = [];
-    arr = _.filter(collection, function() {
-      return !test.apply(self, arguments);
+    arr = _.filter(collection, function(item) {
+      return !test(item);
     });
     return arr;
   };
-  //console.log(_.filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 0; }));
-  //console.log(_.reject([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 0; }));
+  console.log(_.filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 0; }));
+  console.log(_.reject([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 0; }));
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
@@ -131,18 +131,6 @@ var _ = {};
     return arr;
   };
 
-   var doubled = _.map([1, 2, 3], function(num) {
-      return num * 2;
-    });
-
-   console.log(doubled);
-
-  /*
-   * TIP: map is really handy when you want to transform an array of
-   * values into a new array of values. _.pluck() is solved for you
-   * as an example of this.
-   */
-
   // Takes an array of objects and returns and array of the values of
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
@@ -158,7 +146,26 @@ var _ = {};
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+       //return _.map(collection, function(val){
+       //  return functionOrKey.apply(val, args);
+       //  });
+      var arr = [];
+        //check to see if function or method name provided
+        var isFunc = typeof functionOrKey === 'function' ? true : false;
+        for(var i = 0; i < collection.length; i++){
+          arr.push((isFunc ? functionOrKey : collection[i][functionOrKey]).apply(collection[i], args))
+      }
+      return arr;
   };
+
+    var reverse = function(){
+      return this.split('').reverse().join('');
+    };
+
+    var upperCasedStrings = _.invoke(['dog', 'cat'], 'toUpperCase');
+    var reversedStrings = _.invoke(['dog', 'cat'], reverse);
+    console.log(reversedStrings);
+    console.log(upperCasedStrings);
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(previousValue, item) for each item. previousValue should be
@@ -171,8 +178,8 @@ var _ = {};
   // Example:
   //   var numbers = [1,2,3];
   //   var sum = _.reduce(numbers, function(total, number){
-  //     return total + number;
-  //   }, 0); // should be 6
+  //     return total +// should be 6 number;
+  //   }, 0); 
   _.reduce = function(collection, iterator, accumulator) {
   };
 
