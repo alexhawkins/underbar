@@ -105,11 +105,9 @@ var _ = {};
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    return _.filter(array, function(val, index, self){
       // make sure there is only one index, duplicates will have
       // multiple indexes, we won't return those.
-      return self.indexOf(val) === index; 
-    }).sort(function(x,y){ return x - y; }); //sort the duplicate free array
+    return _.filter(array, function(el, index) { return array.indexOf(el) === index; }).sort(function(x,y) { return x - y; });
   };
 
   console.log(_.uniq([1,23,23,4,4,5,42,3,2,4,66,66,0,7,66,77,7,10,9,5,2,1]));
@@ -300,9 +298,19 @@ var _ = {};
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function(array) {
+   _.shuffle = function(array) {
+    var arrayClone = array.slice(); //clone array using slice method
+    for (var i = 0, temp, pos; i < array.length; i++) {
+        //create random position length of array and floor it so that our 
+        //random position is always one position less than the length of our array
+        //to account for the indexing of arrays at position 0.
+        pos = Math.floor(Math.random() * array.length);
+        temp = arrayClone[i]; //store current element in temporary array;
+        arrayClone[i] = arrayClone[pos]; //swap current element with random element;
+        arrayClone[pos] = temp; // replace random element with val of initial element stored in temp;
+    }
+    return arrayClone;
   };
-
 
   /**
    * Note: This is the end of the pre-course curriculum. Feel free to continue,
