@@ -301,13 +301,13 @@ var _ = {};
    _.shuffle = function(array) {
     var arrayClone = array.slice(); //clone array using slice method
     for (var i = 0, temp, pos; i < array.length; i++) {
-        //create random position length of array and floor it so that our 
-        //random position is always one position less than the length of our array
-        //to account for the indexing of arrays at position 0.
+        //create a random position from 0 to length of array. Floor our 
+        //random position to ensure it is never larger than 1 minus
+        //the length of our array to account for the indexing of arrays at position 0.
         pos = Math.floor(Math.random() * array.length);
         temp = arrayClone[i]; //store current element in temporary array;
         arrayClone[i] = arrayClone[pos]; //swap current element with random element;
-        arrayClone[pos] = temp; // replace random element with val of initial element stored in temp;
+        arrayClone[pos] = temp; // replace random element with value of initial element stored in temp;
     }
     return arrayClone;
   };
