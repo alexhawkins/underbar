@@ -304,6 +304,7 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+   
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -312,7 +313,15 @@ var _ = {};
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait) {
+  _.delay = function(func, wait){
+    //get any extra agruments passed after the first two
+    //use call method to call slice method on arguments objects which
+    //only exists for objects of prototype Array without using call.
+    var args =  Array.prototype.slice.call(arguments, 2);
+    //wait a few seconds to apply our function with those args
+    setTimeout(function(){
+      func.apply(null, args);
+    }, wait);
   };
 
 
