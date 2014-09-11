@@ -304,7 +304,7 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-   
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -374,7 +374,19 @@ var _ = {};
   // The new array should contain all elements of the multidimensional array.
   //
   // Hint: Use Array.isArray to check if something is an array
-  _.flatten = function(nestedArray, result) {
+  //non recursive 
+  _.flatten = function(arr) {
+
+    var arrayExists = true;
+    while (arrayExists) {
+        arrayExists = false;
+        _.each(arr, function(el) {
+            if (Array.isArray(el))
+                arrayExists = true;
+        })
+        arr = Array.prototype.concat.apply([], arr);
+    }
+    return arr;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
