@@ -376,7 +376,6 @@ var _ = {};
   // Hint: Use Array.isArray to check if something is an array
   //non recursive 
   _.flatten = function(arr) {
-
     var arrayExists = true;
     while (arrayExists) {
         arrayExists = false;
@@ -392,6 +391,20 @@ var _ = {};
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var intersected = [];
+    var firstArg = ([].slice.call(arguments, 0, 1))[0]; //get first argument
+    var lastArgs = [].slice.call(arguments, 1); //get last args after first
+    _.each(firstArg, function(checkAgainst) {
+        var count = 0;
+        _.each(lastArgs, function(arg) {
+           _.each(arg, function(el) {
+                if (el === checkAgainst)
+                    count++;
+            });
+        });
+        count >= lastArgs.length ? intersected.push(checkAgainst) : 0;
+    });
+    return intersected;
   };
 
   // Take the difference between one array and a number of other arrays.
