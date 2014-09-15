@@ -409,7 +409,21 @@ var _ = {};
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
-  _.difference = function(array) {
+  _.difference = function() {
+      var uniqNumbers = [];
+      var firstArg = [].slice.call(arguments, 0, 1)[0];
+      var nextArgs = [].slice.call(arguments, 1);
+      _.each(firstArg, function(checkVal) {
+          var doesNotExist = true;
+          _.each(nextArgs, function(el) {
+              _.each(el, function(number) {
+                  if (number === checkVal)
+                      doesNotExist = false;
+              });
+          });
+          doesNotExist ? uniqNumbers.push(checkVal) : 0;
+      });
+      return uniqNumbers;
   };
 
 
