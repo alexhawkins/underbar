@@ -186,7 +186,7 @@ var _ = {};
       return accumulator;
   };
 
-  // Determine if the array or object contains a given value (using `===`).
+ // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
@@ -304,7 +304,15 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-
+    var memos = {};
+    return function(arg){
+      if(arg in memos){
+        return memos[arg];
+      }else{
+        memos[arg] = func(arg);
+        return memos[arg];
+      }
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
