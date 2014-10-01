@@ -96,17 +96,10 @@ var _ = {};
 
     // Calls the method named by functionOrKey on each value in the list.
     // Note: you will nead to learn a bit about .apply to complete this.
-    _.invoke = function(collection, functionOrKey, args) {
-        //return _.map(collection, function(val){
-        //  return functionOrKey.apply(val, args);
-        //  });
-        var arr = [];
-        //check to see if function or method name provided
-        var isFunc = typeof functionOrKey === 'function' ? true : false;
-        for (var i = 0; i < collection.length; i++) {
-            arr.push((isFunc ? functionOrKey : collection[i][functionOrKey]).apply(collection[i], args));
-        }
-        return arr;
+    _.invoke = function(collection, func, args) {
+       return _.map(collection, function(el){
+        return (func instanceof Function) ? func.apply(el, args) : el[func].apply(el, args);
+       });
     };
 
     var reverse = function() {
