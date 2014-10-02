@@ -1,5 +1,6 @@
 /*jshint eqnull:true, expr:true*/
 //var _ = require('underscore');
+'use strict';
 var _ = {};
 
 (function() {
@@ -33,7 +34,7 @@ var _ = {};
             for (var key in collection)
                 iterator(collection[key], key, collection);
         } else if (collection === null) {
-            return collection
+            return collection;
         }
     };
 
@@ -63,7 +64,7 @@ var _ = {};
 
     _.reject = function(collection, test) {
         return _.filter(collection, function(item) {
-            return !test(item)
+            return !test(item);
         });
 
     };
@@ -75,7 +76,6 @@ var _ = {};
         });
     };
 
-
     // Return the results of applying an iterator to each element.
     _.map = function(collection, iterator) {
         var arr = [];
@@ -85,45 +85,20 @@ var _ = {};
         return arr;
     };
 
-    // Takes an array of objects and returns and array of the values of
-    // a certain property in it. E.g. take an array of people and return
-    // an array of just their ages
     _.pluck = function(collection, key) {
         return _.map(collection, function(obj) {
             return obj[key];
-        })
+        });
     };
 
     // Calls the method named by functionOrKey on each value in the list.
     // Note: you will nead to learn a bit about .apply to complete this.
     _.invoke = function(collection, func, args) {
-       return _.map(collection, function(el){
-        return (func instanceof Function) ? func.apply(el, args) : el[func].apply(el, args);
-       });
+        return _.map(collection, function(el) {
+            return (func instanceof Function) ? func.apply(el, args) : el[func].apply(el, args);
+        });
     };
 
-    var reverse = function() {
-        return this.split('').reverse().join('');
-    };
-
-    var upperCasedStrings = _.invoke(['dog', 'cat'], 'toUpperCase');
-    var reversedStrings = _.invoke(['dog', 'cat'], reverse);
-    console.log(reversedStrings);
-    console.log(upperCasedStrings);
-
-    // Reduces an array or object to a single value by repetitively calling
-    // iterator(previousValue, item) for each item. previousValue should be
-    // the return value of the previous iterator call.
-    //
-    // You can pass in an initialValue that is passed to the first iterator
-    // call. If initialValue is not explicitly passed in, it should default to the
-    // first element in the collection.
-    //
-    // Example:
-    //   var numbers = [1,2,3];
-    //   var sum = _.reduce(numbers, function(total, number){
-    //     return total +// should be 6 number;
-    //   }, 0); 
     _.reduce = function(collection, iterator, accum) {
         accum = accum === undefined ? _.first(collection) : accum;
         return _.last(_.map(collection, function(el) {
@@ -133,39 +108,26 @@ var _ = {};
 
     // Determine if the array or object contains a given value (using `===`).
     _.contains = function(collection, target) {
-        // TIP: Many iteration problems can be most easily expressed in
-        // terms of reduce(). Here's a freebie to demonstrate!
+
         return _.reduce(collection, function(wasFound, item) {
-            if (wasFound) {
-                return true;
-            }
-            return item === target;
+            return wasFound ? true : item === target;
         }, false);
     };
 
-
     // Determine whether all of the elements match a truth test.
     _.every = function(collection, iterator) {
-        // TIP: Try re-using reduce() here.
-        var checkEvery = true;
-        _.each(collection, function(el) {
-            if (iterator) {
-                if (!iterator(el)) checkEvery = false;
-            } else {
-                if (!el) checkEvery = false;
-            }
-        });
-        return checkEvery;
+        if (collection.length === 0) return true;
+        return _.reduce(collection, function(isTrue, el) {
+            return iterator ? ((!isTrue) ? false : iterator(el) ? true : false) : el;
+        }, true);
     };
 
     // Determine whether any of the elements pass a truth test. If no iterator is
     // provided, provide a default one
     _.some = function(collection, iterator) {
-        // TIP: There's a very clever way to re-use every() here.
         iterator = iterator || _.identity;
-        // TIP: There's a very clever way to re-use every() here
-        return !_.every(collection, function(item) {
-            return !iterator(item);
+        return !_.every(collection, function(el) {
+            return !iterator(el);
         });
     };
 
@@ -257,7 +219,7 @@ var _ = {};
                 memos[arg] = func(arg);
                 return memos[arg];
             }
-        }
+        };
     };
 
     // Delays a function for the given number of milliseconds, and then calls
@@ -359,7 +321,7 @@ var _ = {};
             _.each(arr, function(el) {
                 if (Array.isArray(el))
                     arrayExists = true;
-            })
+            });
             arr = Array.prototype.concat.apply([], arr);
         }
         return arr;
