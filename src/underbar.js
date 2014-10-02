@@ -41,7 +41,6 @@ var _ = {};
     // Returns the index at which value can be found in the array, or -1 if value
     // is not present in the array.
     _.indexOf = function(array, target) {
-
         var result = -1;
         _.each(array, function(el, index) {
             if (el === target && result === -1) {
@@ -108,7 +107,6 @@ var _ = {};
 
     // Determine if the array or object contains a given value (using `===`).
     _.contains = function(collection, target) {
-
         return _.reduce(collection, function(wasFound, item) {
             return wasFound ? true : item === target;
         }, false);
@@ -135,43 +133,26 @@ var _ = {};
     /**
      * OBJECTS
      * =======
-     *
-     * In this section, we'll look at a couple of helpers for merging objects.
      */
 
-    // Extend a given object with all the properties of the passed in
-    // object(s).
-    //
-    // Example:
-    //   var obj1 = {key1: "something"};
-    //   _.extend(obj1, {
-    //     key2: "something new",
-    //     key3: "something else new"
-    //   }, {
-    //     bla: "even more stuff"
-    //   }); // obj1 now contains key1, key2, key3 and bla
     _.extend = function(obj) {
-        _.each(arguments, function(extendObj) {
-            for (var key in extendObj)
-                obj[key] = extendObj[key];
+        _.each(arguments, function(extension) {
+            for (var key in extension)
+                obj[key] = extension[key];
         });
         return obj;
     };
 
     // Like extend, but doesn't ever overwrite a key that already
     // exists in obj
-    _.defaults = function(obj) {
-        _.each(arguments, function(defaultsObj) {
-            for (var key in defaultsObj) {
-                //check to see if object key already exists
-                //if it does, it won't return undefined. If the key
-                //is undefined, add it to our object
-                obj[key] === undefined ? obj[key] = defaultsObj[key] : 0;
+     _.defaults = function(obj) {
+        _.each(arguments, function(extend) {
+            for (var key in extend) {
+                if (!(key in obj)) obj[key] = extend[key];
             }
         });
         return obj;
     };
-
 
     /**
      * FUNCTIONS
@@ -224,44 +205,30 @@ var _ = {};
 
     // Delays a function for the given number of milliseconds, and then calls
     // it with the arguments supplied.
-    //
-    // The arguments for the original function are passed after the wait
-    // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
-    // call someFunction('a', 'b') after 500ms
+
     _.delay = function(func, wait) {
-        //get any extra agruments passed after the first two
-        //use call method to call slice method on arguments objects which
-        //only exists for objects of prototype Array without using call.
-        var args = Array.prototype.slice.call(arguments, 2);
-        //wait a few seconds to apply our function with those args
+        var args = [].slice.call(arguments, 2);
         setTimeout(function() {
             func.apply(null, args);
         }, wait);
     };
-
-
     /**
      * ADVANCED COLLECTION OPERATIONS
      * ==============================
      */
 
     // Randomizes the order of an array's contents.
-    //
-    // TIP: This function's test suite will ask that you not modify the original
-    // input array. For a tip on how to make a copy of an array, see:
-    // http://mdn.io/Array.prototype.slice
+  
     _.shuffle = function(array) {
-        var arrayClone = array.slice(); //clone array using slice method
-        for (var i = 0, temp, pos; i < array.length; i++) {
-            //create a random position from 0 to length of array. Floor our 
-            //random position to ensure it is never larger than 1 minus
-            //the length of our array to account for the indexing of arrays at position 0.
-            pos = Math.floor(Math.random() * array.length);
-            temp = arrayClone[i]; //store current element in temporary array;
-            arrayClone[i] = arrayClone[pos]; //swap current element with random element;
-            arrayClone[pos] = temp; // replace random element with value of initial element stored in temp;
+        var clone = array.slice(0),
+            pos, temp;
+        for (var i = 0; i < clone.length; i++) {
+            pos = Math.floor(Math.random() * clone.length);
+            temp = clone[i];
+            clone[i] = clone[pos];
+            clone[pos] = temp;
         }
-        return arrayClone;
+        return clone;
     };
 
     /**
