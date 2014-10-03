@@ -191,7 +191,7 @@ var _ = {};
     // _.memoize should return a function that when called, will check if it has
     // already computed the result for the given argument and return that value
     // instead if possible.
-    
+
     _.memoize = function(func) {
         var cache = {};
         return function() {
@@ -236,7 +236,7 @@ var _ = {};
 
     _.sortBy = function(collection, iterator) {
         var isString = typeof iterator === 'string';
-        return collection.sort(function(x, y) {
+        return [].sort.call(collection, function(x, y) {
             return isString ? x[iterator] - y[iterator] : iterator(x) - iterator(y);
         });
     };
@@ -274,25 +274,13 @@ var _ = {};
     };
     */
 
-    // Zip together two or more arrays with elements of the same index
-    // going together.
-    //
-    // Example:
-    // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
     _.zip = function() {
-        var arr = [],
+        var longest = [].sort.call(arguments, function(x, y) {
+                return y.length - x.length;
+            })[0].length,
             zipped = [];
-        //get length of longest array so we know how many times to iterate
-        var len = [].sort.call(arguments, function(x, y) {
-            return y.length - x.length;
-        })[0].length;
-        for (var i = 0; i < len; i++) {
-            _.each(arguments, function(arg) {
-                arr.push(arg[i]);
-            });
-            zipped.push(arr);
-            arr = [];
-        }
+        for (var i = 0; i < longest; i++)
+            zipped[i] = _.pluck(arguments, i);
         return zipped;
     };
 
