@@ -145,7 +145,7 @@ var _ = {};
 
     // Like extend, but doesn't ever overwrite a key that already
     // exists in obj
-     _.defaults = function(obj) {
+    _.defaults = function(obj) {
         _.each(arguments, function(extend) {
             for (var key in extend) {
                 if (!(key in obj)) obj[key] = extend[key];
@@ -218,7 +218,7 @@ var _ = {};
      */
 
     // Randomizes the order of an array's contents.
-  
+
     _.shuffle = function(array) {
         var clone = array.slice(0),
             pos, temp;
@@ -231,11 +231,6 @@ var _ = {};
         return clone;
     };
 
-    /**
-     * Note: This is the end of the pre-course curriculum. Feel free to continue,
-     * but nothing beyond here is required.
-     */
-
 
     // Sort the object's values by a criterion produced by an iterator.
     // If iterator is a string, sort objects by that property with the name
@@ -243,16 +238,44 @@ var _ = {};
     // an array of people by their name.
 
     _.sortBy = function(collection, iterator) {
-        if (typeof iterator === 'string') {
-            return collection.sort(function(x, y) {
-                return x[iterator] - y[iterator];
-            });
-        } else if (typeof iterator === 'function') {
-            return collection.sort(function(x, y) {
-                return iterator(x) - iterator(y);
-            });
-        }
+        var isString = typeof iterator === 'string';
+        return collection.sort(function(x, y) {
+            return isString ? x[iterator] - y[iterator] : iterator(x) - iterator(y);
+        });
     };
+
+    /* LONG VERSION OF sortBy written out
+    *****************************************************
+    var sortBy = function(col, iterator) {
+
+        var isString = typeof iterator === 'string',
+            len = col.length,
+            temp, lowest;
+
+        each(col, function(_, index) {
+            lowest = index;
+            if (isString) {
+                for (var i = index + 1; i < len; i++) {
+                    if (col[i][iterator] < col[lowest][iterator])
+                        lowest = i;
+                }
+            } else {
+                for (var i = index + 1; i < len; i++) {
+                    if (iterator(col[i]) < iterator(col[lowest]) || col[lowest] === undefined)
+                        lowest = i;
+                }
+            }
+            
+            if (index != lowest) {
+                temp = col[index];
+                col[index] = col[lowest];
+                col[lowest] = temp;
+            }
+        });
+
+        return col;
+    };
+    */
 
     // Zip together two or more arrays with elements of the same index
     // going together.
