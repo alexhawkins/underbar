@@ -191,15 +191,12 @@ var _ = {};
     // _.memoize should return a function that when called, will check if it has
     // already computed the result for the given argument and return that value
     // instead if possible.
+    
     _.memoize = function(func) {
-        var memos = {};
-        return function(arg) {
-            if (arg in memos) {
-                return memos[arg];
-            } else {
-                memos[arg] = func(arg);
-                return memos[arg];
-            }
+        var cache = {};
+        return function() {
+            var args = [].slice.call(arguments);
+            return cache[args] = (args in cache) ? cache[args] : func.apply(this, args);
         };
     };
 
@@ -252,7 +249,7 @@ var _ = {};
             len = col.length,
             temp, lowest;
 
-        each(col, function(_, index) {
+        _.each(col, function(_, index) {
             lowest = index;
             if (isString) {
                 for (var i = index + 1; i < len; i++) {
@@ -265,7 +262,7 @@ var _ = {};
                         lowest = i;
                 }
             }
-            
+
             if (index != lowest) {
                 temp = col[index];
                 col[index] = col[lowest];
