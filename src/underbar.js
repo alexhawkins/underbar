@@ -289,17 +289,13 @@ var _ = {};
     //
     // Hint: Use Array.isArray to check if something is an array
     //non recursive 
-    _.flatten = function(arr) {
-        var arrayExists = true;
-        while (arrayExists) {
-            arrayExists = false;
-            _.each(arr, function(el) {
-                if (Array.isArray(el))
-                    arrayExists = true;
-            });
-            arr = Array.prototype.concat.apply([], arr);
-        }
-        return arr;
+    /*********FLATTEN**********/
+    _.flatten = function(nestedArray, result) {
+        _.each(nestedArray, function(el) {
+            if (Array.isArray(el))
+                nestedArray = _.flatten([].concat.apply([], nestedArray));
+        });
+        return nestedArray;
     };
 
     // Takes an arbitrary number of arrays and produces an array that contains
