@@ -297,22 +297,27 @@ var _ = {};
         });
         return nestedArray;
     };
-
+    /*********UNION**********/
+    _.union = function() {
+        return _.uniq(_.flatten(arguments));
+    };
     // Takes an arbitrary number of arrays and produces an array that contains
     // every item shared between all the passed-in arrays.
     _.intersection = function() {
-        var intersected = [];
-        var firstArg = ([].slice.call(arguments, 0, 1))[0]; //get first argument
-        var lastArgs = [].slice.call(arguments, 1); //get last args after first
-        _.each(firstArg, function(checkAgainst) {
-            var count = 0;
-            _.each(lastArgs, function(arg) {
-                _.each(arg, function(el) {
-                    if (el === checkAgainst)
+        var checkAgainst = [].slice.call(arguments, 1), //arrays to check
+            mainVals = [].slice.call(arguments, 0, 1)[0], //get first array 
+            intersected = [];
+        _.each(mainVals, function(val) {
+            var totalCount = 0;
+            _.each(checkAgainst, function(obj) {
+                var count = 0;
+                _.each(obj, function(el) {
+                    if (el === val)
                         count++;
                 });
+                if (count > 0) totalCount++;
             });
-            count >= lastArgs.length ? intersected.push(checkAgainst) : 0;
+            if (totalCount === checkAgainst.length) intersected.push(val);
         });
         return intersected;
     };
