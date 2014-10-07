@@ -303,39 +303,29 @@ var _ = {};
     };
     // Takes an arbitrary number of arrays and produces an array that contains
     // every item shared between all the passed-in arrays.
+
+    /*********INTERSECTION**********/
     _.intersection = function() {
         var args = [].slice.call(arguments),
-            argsLength = args.length - 1,
-            checkAgainst = _.last(_.sortBy(args, 'length'), argsLength), //arrays to check
-            mainVal = _.first(args), //get first array which should be shortest
-            intersected = [];
-        _.each(mainVal, function(val) {
-            var totalCount = 0;
-            _.each(checkAgainst, function(obj) {
-                var count = 0;
-                _.each(obj, function(el) {
-                    if (el === val)
-                        count++;
-                });
-                if (count > 0) totalCount++;
-            });
-            if (totalCount === argsLength) intersected.push(val);
-        });
-        return intersected;
-    };
-
-    // Take the difference between one array and a number of other arrays.
-    // Only the elements present in just the first array will remain.
-    _.difference = function(array) {
-        var otherArgs = _.flatten([].slice.call(arguments, 1));
-        return _.filter(array, function(el) {
-            for (var i = 0; i < otherArgs.length; i++)
-                if (el === otherArgs[i]) return false;
+            checkAgainst = _.first(_.sortBy(args, 'length'), args.length - 1), //arrays to check
+            mainVals = _.uniq(_.last(_.sortBy(args, 'length'))); //get first array 
+        return _.filter(mainVals, function(val) {
+            for (var i = 0; i < checkAgainst.length; i++)
+                if (!_.contains(checkAgainst[i], val)) return false;
             return true;
         });
     };
 
-
+    // Take the difference between one array and a number of other arrays.
+    // Only the elements present in just the first array will remain.
+    
+    /*********DIFFERENCE**********/
+    _.difference = function(array) {
+        var otherArgs = _.flatten([].slice.call(arguments, 1));
+        return _.filter(array, function(el) {
+            return _.contains(otherArgs, el) ? false : true;
+        });
+    };
     /**
      * MEGA EXTRA CREDIT
      * =================
